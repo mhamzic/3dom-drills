@@ -1,48 +1,72 @@
+// creating elements  and setting parameters
 const button = document.createElement("button");
+const buttonContainer = document.createElement("div");
+const mainContainer = document.createElement("div");
+let clicks = 0;
+
+buttonContainer.id = "button-container";
+mainContainer.id = "main-container";
 button.innerText = "Add Square";
-document.body.appendChild(button);
-const colors = ["green", "blue", "orange", "darkgreen", "black", "brown"];
-let i = 1;
+button.style.display = "block";
 
-button.addEventListener("click", function() {
-  const square = document.createElement("div");
-  square.className = "div-box";
-  square.id = i;
-  document.body.appendChild(square);
-  i++;
-  square.addEventListener("mouseover", function() {
-    let squareID = square.id;
-    square.innerText = squareID;
-  });
-  square.addEventListener("mouseout", function() {
-    square.innerText = "";
-  });
-  square.addEventListener("click", function() {
-    let r = Math.floor(Math.random() * 255);
-    let g = Math.floor(Math.random() * 255);
-    let b = Math.floor(Math.random() * 255);
-    square.style.background = `rgb(${r},${b},${g})`;
-  });
+// appending starter elemenets and creating structure
+document.body.appendChild(buttonContainer);
+buttonContainer.appendChild(button);
+document.body.appendChild(mainContainer);
 
-  square.addEventListener("dblclick", function() {
-    let squareID = square.id;
-    if (squareID % 2 === 0) {
-      let selectedID = parseInt(squareID) + 1;
-      selectedSquare = document.getElementById(selectedID);
-      console.log(selectedID);
-      if (selectedSquare === null) {
-        alert("There is no more square after");
-        return;
-      }
-      selectedSquare.outerHTML = "  ";
-    } else {
-      let selectedID = parseInt(squareID) - 1;
-      selectedSquare = document.getElementById(selectedID);
-      if (selectedSquare === null) {
-        alert("There is no more square after");
-        return;
-      }
-      selectedSquare.style.display = "none";
+// add event listnerer to the button
+button.addEventListener("click", newDiv);
+
+// create new div and add class and id no
+function newDiv(e) {
+  newDiv = document.createElement("div");
+  newDiv.className = "box";
+  mainContainer.appendChild(newDiv);
+  let clicksNumber = (document.getElementsByTagName(button).value = ++clicks);
+  newDivId = clicksNumber;
+  newDiv.id = newDivId;
+
+  // add event listeners to newly created div
+  newDiv.addEventListener("mouseover", showId);
+  newDiv.addEventListener("mouseout", hideId);
+  newDiv.addEventListener("click", changeColor);
+  newDiv.addEventListener("dblclick", removeDiv);
+}
+
+//show id on mouse hover
+function showId(e) {
+  e.target.innerText = e.target.id;
+}
+
+//hide id on mouse hover
+function hideId(e) {
+  e.target.innerText = "";
+}
+
+// change color on click
+function changeColor(e) {
+  let r = Math.floor(Math.random() * 255);
+  let g = Math.floor(Math.random() * 255);
+  let b = Math.floor(Math.random() * 255);
+  e.target.style.backgroundColor = `rgb(${r},${g},${b})`;
+}
+
+// remove div on doubleclick
+function removeDiv(e) {
+  // remove right div if clicked id is even
+  if (e.target.id % 2 === 0) {
+    if (e.target.nextSibling === null) {
+      alert("There is no more divs to remove");
+      return;
     }
-  });
-});
+    e.target.nextSibling.remove();
+
+    // remove left dif if clicked id is odd
+  } else {
+    if (e.target.previousSibling === null) {
+      alert("There is no more divs to remove");
+      return;
+    }
+    e.target.previousSibling.remove();
+  }
+}
